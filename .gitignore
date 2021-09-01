@@ -3,3 +3,4 @@ Thumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 /config.json
+.env
