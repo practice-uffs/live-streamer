@@ -61,11 +61,22 @@ npm start
 
 #### 3.1 Conexão com OBS Studio
 
-Para testar a conexão com o OBS, você precisa instalar o plugin [obs-websocket](https://github.com/Palakis/obs-websocket/releases/tag/4.9.1) para ativar conexão via websocket pelo seu OBS Studio.
+Para testar a conexão com o OBS, você precisa instalar o plugin [obs-websocket](https://github.com/Palakis/obs-websocket/releases/tag/4.9.1) para ativar conexão via websocket pelo seu OBS Studio (**obs:** Para isso você também precisa do OBS Studio instalado em sua máquina).
 
 Assim que baixar e instalar o plugin, abra o `OBS` e na aba de `tools` selecione `WebSockets Server Settings`, ative o server, selecione uma porta e crie uma senha de autenticação.
 
+![image](https://user-images.githubusercontent.com/51202705/132265353-9f82c059-d1f7-4e81-a4e0-c0be42faf91f.png)
 
+Após isso, você pode criar um objeto do tipo `obsConnection` no arquivo `obsConnection.js` utilizando as configurações que você realizou no seu OBS.
+
+```
+var obs = new obsConnection("localhost:{serverPort}", "{password}");
+obs.connect().then({
+    
+});
+```
+
+Se bem-sucedido, essa mensagem `Success! We're connected & authenticated` será mostrada no terminal. Como as funções são assíncronas, quando há requisição, você deve chamar os métodos dentro do `then` da conexão do objeto.
 
 
 ## 🤝 Contribua
