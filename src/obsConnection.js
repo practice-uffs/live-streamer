@@ -1,4 +1,5 @@
 const OBSWebSocket   = require('obs-websocket-js');
+const { connect } = require('puppeteer');
 
 class obsConnection{
     constructor(address, password) {
@@ -163,6 +164,16 @@ class obsConnection{
 
     async listOutputs() {
         return this.obs.send("ListOutputs");
+    }
+
+    async takeSourceScreenshot( embedPictureFormat=null, compressionQuality=-1, width=null, height=null) {
+        return this.obs.send("TakeSourceScreenshot", {
+            embedPictureFormat: embedPictureFormat,
+            compressionQuality: compressionQuality,
+            width: width,
+            height: height
+        });
+        // Retorno do data.img contém o frame de preview codificado na base 64, apenas adicionar a um src de uma tag <img>
     }
 
     async setStreamSettings(platform, key, use_auth=false, username, password){
