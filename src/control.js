@@ -1,19 +1,31 @@
-require('dotenv').config()
-const WebSocket = require('ws');
+require('dotenv').config();
+const Echo = require('laravel-echo');
+Pusher =  require('pusher-js');
 
 function control() {
-    const ws = new WebSocket(process.env.WEBSOCKET_SERVER);
+    const echo = new Echo({
+        broadcaster: 'pusher',
+        key: process.env.PUSHER_APP_KEY,
+        wsHost: process.env.WS_HOST,
+        wsPort: process.env.WS_PORT,
+        wssPort: process.env.WSS_PORT,
+        cluster: process.env.PUSHER_APP_CLUSTER,
+        forceTLS: false,
+        disableStats: true,
+    });
 
-    ws.onmessage = function (event) {
-        const data = JSON.parse(event.data);
+    echo.connector.pusher.connection.bind('connected', () => {
+        console.log('\033[0;32mConnection opened\u001b[0m');
+    });
 
-        if (data.action == "ping") {
-            ws.send(JSON.stringify({
-                action: "pong",
-                uuid: "9833a966-fe3e-4c5d-94ab-f7e2a0670e04"
-            }))
-        }
-    }
+    echo.connector.pusher.connection.bind('disconnected', () => {
+        console.log('Connection closed');
+    });
+
+    echo.channel('streamer-channel')
+    .listen('.example-event', (e) => {
+        console.log(e);
+    });
 }
 
 module.exports = control
